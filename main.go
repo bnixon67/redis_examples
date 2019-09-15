@@ -28,7 +28,8 @@ func hmset(key string, args ...interface{}) error {
 	conn := redisPool.Get()
 	defer conn.Close()
 
-	_, err := conn.Do("HMSET", redis.Args{}.Add(key).AddFlat(args)...)
+	//_, err := conn.Do("HMSET", redis.Args{}.Add(key).AddFlat(args)...)
+	_, err := conn.Do("HMSET", append([]interface{}{key}, args...)...)
 	if err != nil {
 		log.Printf("ERROR: fail HMSET %s %s %s", key, args, err.Error())
 		return err
