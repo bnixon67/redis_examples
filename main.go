@@ -15,19 +15,19 @@ func main() {
 	defer conn.Close()
 
 	// Example of HMSET
-	_, err = conn.Do("HMSET", "album:2",
-		"title", "Electric Ladyland",
-		"artist", "Jimi Hendrix",
-		"price", 4.95,
-		"likes", 8)
+	_, err = conn.Do("HMSET", "album:1",
+		"title", "Back in Black",
+		"artist", "AC/DC",
+		"year-released", 1980,
+	)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Electric Ladyland added!")
+	fmt.Println("Album added")
 
 	// Example of HMGET
-	title, err := redis.String(conn.Do("HGET", "album:2", "title"))
+	title, err := redis.String(conn.Do("HGET", "album:1", "title"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -36,13 +36,12 @@ func main() {
 
 	// Example of HMGETALL and Values/ScanStruct
 	type Album struct {
-		Title  string  `redis:"title"`
-		Artist string  `redis:"artist"`
-		Price  float64 `redis:"price"`
-		Likes  int     `redis:"likes"`
+		Title        string `redis:"title"`
+		Artist       string `redis:"artist"`
+		YearReleased int    `redis:"year-released"`
 	}
 
-	values, err := redis.Values(conn.Do("HGETALL", "album:2"))
+	values, err := redis.Values(conn.Do("HGETALL", "album:1"))
 	if err != nil {
 		log.Fatal(err)
 	}
